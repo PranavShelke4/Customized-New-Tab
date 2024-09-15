@@ -1,3 +1,7 @@
+const weatherApiKey = YOUR_WEATHER_API_KEY;
+const pexelsApiKey = YOUR_PEXELS_API_KEY;
+
+
 // Function to update the time
 function updateTime() {
   const timeElement = document.getElementById("time");
@@ -28,7 +32,7 @@ function setGreeting() {
 
 // Function to fetch weather data from OpenWeatherMap API
 async function fetchWeather(lat = null, lon = null) {
-  const apiKey = "692b3dfdc40feb9d03632df5d939a365"; // Use your API key here
+  const apiKey = weatherApiKey; // Use your API key here
 
   const url =
     lat && lon
@@ -481,7 +485,7 @@ document.addEventListener("DOMContentLoaded", fetchQuote);
 
 
 async function fetchRandomBackground() {
-  const apiKey = '11yCTgeWFlltIcLMqXcZw6tnWpB9JHl1ZxR0yNj05WF3AHqveFXevZ7K'; 
+  const apiKey = pexelsApiKey; 
   const query = 'mountain nature';
   const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&page=${Math.floor(Math.random() * 1000)}`; // Random page number
 
