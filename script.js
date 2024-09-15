@@ -140,22 +140,131 @@ function showDeadlinePopup() {
   document.body.appendChild(popup);
 }
 
+// Function to update the focus countdown display
+function updateFocusCountdown() {
+  const focusData = JSON.parse(localStorage.getItem("focusData"));
+  if (!focusData) {
+    document.getElementById("focusCountdown").textContent = "";
+    document.getElementById("focusIcon").style.display = "block"; // Ensure icon is shown when no focus time is set
+    document.getElementById("focusCountdown").style.display = "none"; // Hide the countdown when no focus time is set
+    return;
+  }
+
+  const { endTime } = focusData;
+  const now = new Date();
+  const deadline = new Date(endTime);
+
+  if (now >= deadline) {
+    // Focus time has ended
+    localStorage.removeItem("focusData");
+    document.getElementById("focusCountdown").textContent = "Focus time ended";
+    document.getElementById("focusIcon").style.display = "block"; // Show the focus icon again
+  } else {
+    const timeRemaining = deadline - now;
+    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+    const minutes = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    document.getElementById("focusCountdown").textContent = `${hours
+      .toString()
+      .padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
+    document.getElementById("focusIcon").style.display = "none"; // Hide the icon when focus time is active
+    setTimeout(updateFocusCountdown, 1000); // Update every second
+  }
+}
+
+// Function to handle the focus form submission
+document.getElementById("focusForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const hours = parseInt(document.getElementById("focusHours").value, 10);
+  const minutes = parseInt(document.getElementById("focusMinutes").value, 10);
+
+  if (isNaN(hours) || isNaN(minutes)) {
+    alert("Please enter valid numbers for hours and minutes.");
+    return;
+  }
+
+  const endTime = new Date(
+    Date.now() + hours * 60 * 60 * 1000 + minutes * 60 * 1000
+  ).toISOString();
+  localStorage.setItem("focusData", JSON.stringify({ endTime }));
+
+  // Hide focus icon and show countdown
+  document.getElementById("focusIcon").style.display = "none";
+  document.getElementById("focusPopup").style.display = "none";
+  document.getElementById("focusCountdown").style.display = "block";
+
+  // Refresh the page
+  location.reload();
+
+  updateFocusCountdown();
+});
+
+// Function to toggle focus mode visibility
+function toggleFocusModeVisibility() {
+  const focusIcon = document.getElementById("focusIcon");
+  const focusCountdown = document.getElementById("focusCountdown");
+
+  if (isFocusModeActive) {
+    focusIcon.style.display = "none"; // Hide the focus icon
+    focusCountdown.style.display = "block"; // Show the focus countdown
+  } else {
+    focusIcon.style.display = "block"; // Show the focus icon
+    focusCountdown.style.display = "none"; // Hide the focus countdown
+  }
+}
+
+// Function to start focus timer and setup visibility change event listener
+function startFocusTimer() {
+  const focusData = JSON.parse(localStorage.getItem("focusData"));
+  if (!focusData) return;
+
+  const { endTime } = focusData;
+  const now = new Date();
+  const deadline = new Date(endTime);
+
+  if (now >= deadline) {
+    // Focus time has ended
+    localStorage.removeItem("focusData");
+    document.getElementById("focusCountdown").textContent = "Focus time ended";
+    document.getElementById("focusIcon").style.display = "block"; // Show the focus icon again
+    return;
+  }
+
+  updateFocusCountdown();
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      // Pause the timer when the tab is not visible
+      clearInterval(focusInterval);
+    } else {
+      // Resume the timer when the tab becomes visible again
+      startFocusTimer();
+    }
+  });
+}
 
 // Event listener for showing the "Add Links" popup
 document.getElementById("addLinks").addEventListener("click", () => {
-    document.getElementById("links-popup").style.display = "flex"; // Make the popup visible
-  });
-  
-  // Event listener for closing the "Add Links" popup
-  document.getElementById("closeLinksPopup").addEventListener("click", () => {
-    document.getElementById("links-popup").style.display = "none"; // Hide the popup
-  });
-  
+  document.getElementById("links-popup").style.display = "flex"; // Make the popup visible
+});
 
+// Event listener for closing the "Add Links" popup
+document.getElementById("closeLinksPopup").addEventListener("click", () => {
+  document.getElementById("links-popup").style.display = "none"; // Hide the popup
+});
 
+// Event listener for showing the "Focus" popup
+document.getElementById("showFocusPopup").addEventListener("click", () => {
+  document.getElementById("focus-popup").style.display = "flex"; // Make the focus popup visible
+});
 
+// Event listener for closing the "Focus" popup
+document.getElementById("closeFocusPopup").addEventListener("click", () => {
+  document.getElementById("focus-popup").style.display = "none"; // Hide the popup
+});
 
-// Event listeners
+// Event listeners for countdown popup
 document.getElementById("addCountdown").addEventListener("click", () => {
   // Clear the form for new countdown
   document.getElementById("description").value = "";
@@ -235,60 +344,59 @@ async function fetchCityTime(city) {
 // Fetch the local time of a specific city (e.g., 'Asia/Kolkata')
 fetchCityTime("Asia/Kolkata");
 
-
 // Save links to localStorage and display them
-document.addEventListener('DOMContentLoaded', function () {
-  const linksPopup = document.getElementById('links-popup');
-  const showLinksPopup = document.getElementById('showLinksPopup');
-  const closeLinksPopup = document.getElementById('closeLinksPopup');
-  const showAddLinkForm = document.getElementById('showAddLinkForm');
-  const linksForm = document.getElementById('linksForm');
-  const cancelAddLink = document.getElementById('cancelAddLink');
-  const savedLinksContainer = document.getElementById('savedLinks');
+document.addEventListener("DOMContentLoaded", function () {
+  const linksPopup = document.getElementById("links-popup");
+  const showLinksPopup = document.getElementById("showLinksPopup");
+  const closeLinksPopup = document.getElementById("closeLinksPopup");
+  const showAddLinkForm = document.getElementById("showAddLinkForm");
+  const linksForm = document.getElementById("linksForm");
+  const cancelAddLink = document.getElementById("cancelAddLink");
+  const savedLinksContainer = document.getElementById("savedLinks");
 
   // Show links popup
-  showLinksPopup.addEventListener('click', () => {
-    linksPopup.style.display = 'block';
+  showLinksPopup.addEventListener("click", () => {
+    linksPopup.style.display = "block";
     loadSavedLinks(); // Load saved links when opening popup
-    savedLinksContainer.style.display = 'block'; // Ensure links are visible
-    linksForm.style.display = 'none'; // Ensure form is hidden initially
+    savedLinksContainer.style.display = "block"; // Ensure links are visible
+    linksForm.style.display = "none"; // Ensure form is hidden initially
   });
 
   // Close links popup
-  closeLinksPopup.addEventListener('click', () => {
-    linksPopup.style.display = 'none';
+  closeLinksPopup.addEventListener("click", () => {
+    linksPopup.style.display = "none";
   });
 
   // Show form to add link and hide saved links
-  showAddLinkForm.addEventListener('click', () => {
-    linksForm.style.display = 'block'; // Show the form
-    savedLinksContainer.style.display = 'none'; // Hide the saved links
+  showAddLinkForm.addEventListener("click", () => {
+    linksForm.style.display = "block"; // Show the form
+    savedLinksContainer.style.display = "none"; // Hide the saved links
   });
 
   // Cancel adding a link
-  cancelAddLink.addEventListener('click', () => {
+  cancelAddLink.addEventListener("click", () => {
     linksForm.reset();
-    linksForm.style.display = 'none'; // Hide the form
-    savedLinksContainer.style.display = 'block'; // Show the saved links again
+    linksForm.style.display = "none"; // Hide the form
+    savedLinksContainer.style.display = "block"; // Show the saved links again
   });
 
   // Add link to local storage and render it
-  linksForm.addEventListener('submit', (e) => {
+  linksForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const linkTitle = document.getElementById('linkTitle').value;
-    const linkURL = document.getElementById('linkURL').value;
+    const linkTitle = document.getElementById("linkTitle").value;
+    const linkURL = document.getElementById("linkURL").value;
 
     // Save the link to localStorage
-    const links = JSON.parse(localStorage.getItem('savedLinks')) || [];
+    const links = JSON.parse(localStorage.getItem("savedLinks")) || [];
     links.push({ title: linkTitle, url: linkURL });
-    localStorage.setItem('savedLinks', JSON.stringify(links));
+    localStorage.setItem("savedLinks", JSON.stringify(links));
 
     // Reset form and hide it
     linksForm.reset();
-    linksForm.style.display = 'none';
+    linksForm.style.display = "none";
 
     // Show saved links again
-    savedLinksContainer.style.display = 'block';
+    savedLinksContainer.style.display = "block";
 
     // Reload the saved links
     loadSavedLinks();
@@ -296,29 +404,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Load saved links from localStorage and display them
   function loadSavedLinks() {
-    const links = JSON.parse(localStorage.getItem('savedLinks')) || [];
-    savedLinksContainer.innerHTML = ''; // Clear previous links
+    const links = JSON.parse(localStorage.getItem("savedLinks")) || [];
+    savedLinksContainer.innerHTML = ""; // Clear previous links
 
     links.forEach((link, index) => {
-      const linkElement = document.createElement('a');
+      const linkElement = document.createElement("a");
       linkElement.href = link.url;
-      linkElement.target = '_blank'; // Open in new tab
+      linkElement.target = "_blank"; // Open in new tab
 
       // Create the favicon element
-      const favicon = document.createElement('img');
-      favicon.src = `https://www.google.com/s2/favicons?domain=${new URL(link.url).hostname}`;
-      favicon.classList.add('favicon');
+      const favicon = document.createElement("img");
+      favicon.src = `https://www.google.com/s2/favicons?domain=${
+        new URL(link.url).hostname
+      }`;
+      favicon.classList.add("favicon");
 
       // Create the title element
-      const titleElement = document.createElement('span');
+      const titleElement = document.createElement("span");
       titleElement.textContent = link.title;
-      titleElement.classList.add('link-title');
+      titleElement.classList.add("link-title");
 
       // Create the delete icon
-      const deleteIcon = document.createElement('img');
-      deleteIcon.src = '../assets/icons/delete.svg'; // Replace with your delete icon path
-      deleteIcon.classList.add('delete-icon');
-      deleteIcon.addEventListener('click', (e) => {
+      const deleteIcon = document.createElement("img");
+      deleteIcon.src = "../assets/icons/delete.svg"; // Replace with your delete icon path
+      deleteIcon.classList.add("delete-icon");
+      deleteIcon.addEventListener("click", (e) => {
         e.preventDefault();
         deleteLink(index);
       });
@@ -334,12 +444,77 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Function to delete a link from localStorage
   function deleteLink(index) {
-    const links = JSON.parse(localStorage.getItem('savedLinks')) || [];
+    const links = JSON.parse(localStorage.getItem("savedLinks")) || [];
     links.splice(index, 1); // Remove the link at the given index
-    localStorage.setItem('savedLinks', JSON.stringify(links)); // Save the updated list
+    localStorage.setItem("savedLinks", JSON.stringify(links)); // Save the updated list
     loadSavedLinks(); // Reload the links
   }
 
   // Initial load of saved links
   loadSavedLinks();
 });
+
+async function fetchQuote() {
+  try {
+    const response = await fetch("https://api.quotable.io/random");
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    console.log(data);
+
+    if (data && data.content && data.author) {
+      const quoteElement = document.getElementById("quote");
+      quoteElement.textContent = `"${data.content}" — ${data.author}`;
+    } else {
+      console.error("Invalid data structure:", data);
+    }
+  } catch (error) {
+    console.error("There has been a problem with your fetch operation:", error);
+    const quoteElement = document.getElementById("quote");
+    quoteElement.textContent = "Failed to load quote.";
+  }
+}
+
+// Fetch a new quote on page load
+document.addEventListener("DOMContentLoaded", fetchQuote);
+
+
+async function fetchRandomBackground() {
+  const apiKey = '11yCTgeWFlltIcLMqXcZw6tnWpB9JHl1ZxR0yNj05WF3AHqveFXevZ7K'; 
+  const query = 'mountain nature';
+  const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=1&page=${Math.floor(Math.random() * 1000)}`; // Random page number
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: apiKey
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const data = await response.json();
+
+    if (data && data.photos && data.photos.length > 0 && data.photos[0].src && data.photos[0].src.original) {
+      const imageUrl = data.photos[0].src.original;
+      document.getElementById('background').style.backgroundImage = `url(${imageUrl})`;
+    } else {
+      console.error("Invalid data structure:", data);
+    }
+  } catch (error) {
+    console.error("There has been a problem with your fetch operation:", error);
+    // Fallback to a default background image or color
+    document.getElementById('background').style.backgroundImage = 'url(./assets/bg.jpg)';
+  }
+}
+
+// Fetch a new background image on page load
+document.addEventListener('DOMContentLoaded', fetchRandomBackground);
+
+
+
+// Start focus timer if there is any existing focus data
+startFocusTimer();

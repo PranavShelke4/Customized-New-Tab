@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="container">
+    <div class="background container" id="background">
       <div class="overlay">
         <div class="top-bar">
           <div class="left-side">
@@ -19,9 +19,14 @@
               />
               <p class="link-title">Links</p>
             </div>
-            <div class="links">
-              <img class="focus-icon" src="../assets/icons/focus.svg" />
-              <p class="link-title">Focus</p>
+            <div class="links" id="showFocusPopup">
+              <img
+                class="focus-icon"
+                id="focusIcon"
+                src="../assets/icons/focus.svg"
+              />
+              <p class="focus-time" id="focusCountdown"></p>
+              <p class="link-title" id="focus-title">Focus</p>
             </div>
           </div>
           <div class="right-side">
@@ -49,7 +54,7 @@
         </div>
         <div class="bottom-bar">
           <p class="quote" id="quote">
-            "The only way to do great work is to love what you do."
+           
           </p>
         </div>
       </div>
@@ -84,14 +89,12 @@
     <div class="link-popup" id="links-popup">
       <div class="popup-content glass" id="link-popup-content">
         <div id="savedLinks"></div>
-        <!-- Add Icon to show the form -->
         <img
           class="addLinkIcon"
           src="../assets/icons/add2.svg"
           alt="Add Link"
           id="showAddLinkForm"
         />
-        <!-- Form for adding a new link -->
         <form id="linksForm" style="display: none">
           <label for="linkTitle">Title:</label>
           <input
@@ -115,6 +118,36 @@
           </button>
         </form>
         <button id="closeLinksPopup" class="styled-button">Close</button>
+      </div>
+    </div>
+
+    <!-- Focus Popup -->
+    <div class="focus-popup" id="focus-popup">
+      <div class="popup-content glass">
+        <h2 id="focusPopupTitle">Set Focus Time</h2>
+        <form id="focusForm">
+          <input
+            type="number"
+            id="focusHours"
+            name="focusHours"
+            class="styled-input"
+            min="0"
+            placeholder="Hours"
+          />
+          <input
+            type="number"
+            id="focusMinutes"
+            name="focusMinutes"
+            class="styled-input"
+            min="0"
+            placeholder="Minutes"
+          />
+          <button type="submit" class="styled-button">Start</button>
+          <button type="button" id="closeFocusPopup" class="styled-button">
+            Close
+          </button>
+        </form>
+        <div id="focusCountdown" style="display: none"></div>
       </div>
     </div>
 

@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -7,10 +8,17 @@ body, html {
 }
 
 .container {
-  background-image: url("./assets/bg.jpg");
+  /* background-image: url("./assets/bg.jpg"); */
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-position: center;
-  height: 100vh;
+  background-repeat: no-repeat;
+  transition: background-image 0.5s ease-in-out; /* Smooth transition */
 }
 
 .overlay {
@@ -64,13 +72,16 @@ body, html {
   margin: 0;
 }
 
-.link-icon, .focus-icon, .plus-icon {
+.link-icon,
+.focus-icon,
+.plus-icon {
   width: 25px;
   height: 25px;
   cursor: pointer;
 }
 
-.weather, .weather-links {
+.weather,
+.weather-links {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -90,7 +101,8 @@ body, html {
   margin: 0;
 }
 
-.deadline-title, .weather-city {
+.deadline-title,
+.weather-city {
   font-size: 0.9125rem;
   font-weight: 400;
   margin: 0;
@@ -116,7 +128,8 @@ body, html {
   padding: 0 10px;
 }
 
-.popup, .small-popup {
+.popup,
+.small-popup {
   display: none;
   position: fixed;
   justify-content: center;
@@ -257,3 +270,65 @@ body, html {
   color: black;
 }
 
+/* Existing styles */
+
+#focusCountdown {
+  font-size: 1.625rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.focus-popup {
+  display: none;
+  width: 300px;
+  position: absolute;
+  top: 70px;
+  left: 15px;
+}
+
+#focus-popup {
+  display: none;
+  width: 300px;
+  position: absolute;
+  top: 70px;
+  left: 15px;
+}
+
+#focus-popup .popup-content {
+  text-align: center;
+}
+
+#focusPopupTitle {
+  margin-bottom: 20px;
+}
+
+.focus-popup input.styled-input {
+  width: 100px;
+  display: inline-block;
+  margin: 10px auto;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+::placeholder {
+  color: white;
+  opacity: 1; /* Firefox */
+}
+
+::-ms-input-placeholder { /* Edge 12 -18 */
+  color: white;
+}
+
+.styled-button {
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.quote {
+  font-weight: 400;
+  max-width: 50rem;
+  text-align: center;
+}
