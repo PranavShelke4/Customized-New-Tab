@@ -1,5 +1,4 @@
-body,
-html {
+body, html {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -65,16 +64,13 @@ html {
   margin: 0;
 }
 
-.link-icon,
-.focus-icon,
-.plus-icon {
+.link-icon, .focus-icon, .plus-icon {
   width: 25px;
   height: 25px;
   cursor: pointer;
 }
 
-.weather,
-.weather-links {
+.weather, .weather-links {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -94,8 +90,7 @@ html {
   margin: 0;
 }
 
-.deadline-title,
-.weather-city {
+.deadline-title, .weather-city {
   font-size: 0.9125rem;
   font-weight: 400;
   margin: 0;
@@ -121,9 +116,7 @@ html {
   padding: 0 10px;
 }
 
-/* Glassmorphism Popup styles */
-.popup,
-.small-popup {
+.popup, .small-popup {
   display: none;
   position: fixed;
   justify-content: center;
@@ -136,7 +129,7 @@ html {
   backdrop-filter: blur(10px);
   color: white;
   padding: 20px;
-  border-radius: 15px;
+  border-radius: 5px;
   text-align: center;
 }
 
@@ -164,7 +157,6 @@ html {
   background: rgba(0, 0, 0, 0.7);
 }
 
-/* Hide the add icon when there is an active countdown */
 #addCountdown.hidden {
   display: none;
 }
@@ -179,3 +171,89 @@ html {
   top: 70px;
   right: 15px;
 }
+
+#links-popup {
+  display: none;
+  width: 300px;
+  position: absolute;
+  top: 70px;
+  left: 15px;
+}
+
+.addLinkIcon {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+#link-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#savedLinks {
+  margin-top: 20px;
+}
+
+#savedLinks a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#savedLinks a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#savedLinks .favicon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+#savedLinks .link-title {
+  flex-grow: 1;
+  text-align: left;
+}
+
+#savedLinks .delete-icon {
+  display: none;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+#savedLinks a:hover .delete-icon {
+  display: inline-block;
+}
+
+.addLinkIcon {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+#link-popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+#savedLinks a {
+  text-align: left;
+}
+
+.styled-input {
+  color: black;
+}
+

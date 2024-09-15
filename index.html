@@ -1,71 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>New Tab</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <div class="overlay">
-      <div class="top-bar">
-        <div class="left-side">
-          <div class="links">
-            <img class="link-icon" src="../assets/icons/link.svg" />
-            <p class="link-title">Links</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New Tab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="overlay">
+        <div class="top-bar">
+          <div class="left-side">
+            <div class="links" id="showLinksPopup">
+              <img
+                class="link-icon"
+                id="addLinks"
+                src="../assets/icons/link.svg"
+              />
+              <p class="link-title">Links</p>
+            </div>
+            <div class="links">
+              <img class="focus-icon" src="../assets/icons/focus.svg" />
+              <p class="link-title">Focus</p>
+            </div>
           </div>
-          <div class="links">
-            <img class="focus-icon" src="../assets/icons/focus.svg" />
-            <p class="link-title">Focus</p>
-          </div>
-        </div>
-        <div class="right-side">
-          <div class="weather">
-            <p class="deadline-time hidden" id="deadlineTime">--</p>
-            <img
-              class="plus-icon"
-              src="../assets/icons/add.svg"
-              alt="Add Countdown"
-              id="addCountdown"
-            />
-            <p class="deadline-title">Deadline</p>
-          </div>
-          <div class="weather-links">
+          <div class="right-side">
             <div class="weather">
-              <p class="weather-title">--°C</p>
-              <p class="weather-city">--</p>
+              <p class="deadline-time hidden" id="deadlineTime">--</p>
+              <img
+                class="plus-icon"
+                src="../assets/icons/add.svg"
+                alt="Add Countdown"
+                id="addCountdown"
+              />
+              <p class="deadline-title">Deadline</p>
+            </div>
+            <div class="weather-links">
+              <div class="weather">
+                <p class="weather-title">--°C</p>
+                <p class="weather-city">--</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="header">
-        <div class="time" id="time">--:--</div>
-        <div class="greeting" id="greeting">Good evening,</div>
-      </div>
-      <div class="bottom-bar">
-        <p class="quote" id="quote">
-          "The only way to do great work is to love what you do."
-        </p>
+        <div class="header">
+          <div class="time" id="time">--:--</div>
+          <div class="greeting" id="greeting">Good evening,</div>
+        </div>
+        <div class="bottom-bar">
+          <p class="quote" id="quote">
+            "The only way to do great work is to love what you do."
+          </p>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Countdown Popup -->
-  <div class="small-popup" id="popup">
-    <div class="popup-content glass">
-      <h2 id="popupTitle">Set Countdown</h2>
-      <form id="countdownForm">
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description" class="styled-input" />
-        <label for="endDate">End Date:</label>
-        <input type="datetime-local" id="endDate" name="endDate" class="styled-input" />
-        <button type="submit" class="styled-button">Set Countdown</button>
-      </form>
-      <button id="closePopup" class="styled-button">Close</button>
+    <!-- Countdown Popup -->
+    <div class="small-popup" id="countdown-popup">
+      <div class="popup-content glass">
+        <h2 id="popupTitle">Set Countdown</h2>
+        <form id="countdownForm">
+          <label for="description">Description:</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            class="styled-input"
+          />
+          <label for="endDate">End Date:</label>
+          <input
+            type="datetime-local"
+            id="endDate"
+            name="endDate"
+            class="styled-input"
+          />
+          <button type="submit" class="styled-button">Set Countdown</button>
+        </form>
+        <button id="closePopup" class="styled-button">Close</button>
+      </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
-</body>
+    <!-- Links Popup -->
+    <div class="link-popup" id="links-popup">
+      <div class="popup-content glass" id="link-popup-content">
+        <div id="savedLinks"></div>
+        <!-- Add Icon to show the form -->
+        <img
+          class="addLinkIcon"
+          src="../assets/icons/add2.svg"
+          alt="Add Link"
+          id="showAddLinkForm"
+        />
+        <!-- Form for adding a new link -->
+        <form id="linksForm" style="display: none">
+          <label for="linkTitle">Title:</label>
+          <input
+            type="text"
+            id="linkTitle"
+            name="linkTitle"
+            class="styled-input"
+            required
+          />
+          <label for="linkURL">URL:</label>
+          <input
+            type="url"
+            id="linkURL"
+            name="linkURL"
+            class="styled-input"
+            required
+          />
+          <button type="submit" class="styled-button">Done</button>
+          <button type="button" id="cancelAddLink" class="styled-button">
+            Cancel
+          </button>
+        </form>
+        <button id="closeLinksPopup" class="styled-button">Close</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
