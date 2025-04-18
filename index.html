@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Tab</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://apis.google.com/js/api.js"></script>
   </head>
   <body>
     <div class="background container" id="background">
@@ -27,6 +28,10 @@
               />
               <p class="focus-time" id="focusCountdown"></p>
               <p class="link-title" id="focus-title">Focus</p>
+            </div>
+            <div class="calendar" id="showCalendarPopup">
+              <img class="calendar-icon" src="../assets/icons/calendar.svg" />
+              <p class="link-title">Calendar</p>
             </div>
           </div>
           <div class="right-side">
@@ -53,9 +58,7 @@
           <div class="greeting" id="greeting">Good evening,</div>
         </div>
         <div class="bottom-bar">
-          <p class="quote" id="quote">
-           
-          </p>
+          <p class="quote" id="quote"></p>
         </div>
       </div>
     </div>
@@ -64,7 +67,7 @@
     <div class="small-popup" id="countdown-popup">
       <div class="popup-content glass">
         <h2 id="popupTitle">Set Countdown</h2>
-        <form id="countdownForm">
+        <div>
           <label for="description">Description:</label>
           <input
             type="text"
@@ -79,8 +82,10 @@
             name="endDate"
             class="styled-input"
           />
-          <button type="submit" class="styled-button">Set Countdown</button>
-        </form>
+          <button id="setCountdownButton" class="styled-button">
+            Set Countdown
+          </button>
+        </div>
         <button id="closePopup" class="styled-button">Close</button>
       </div>
     </div>
@@ -95,7 +100,7 @@
           alt="Add Link"
           id="showAddLinkForm"
         />
-        <form id="linksForm" style="display: none">
+        <div id="linksForm" style="display: none">
           <label for="linkTitle">Title:</label>
           <input
             type="text"
@@ -112,11 +117,11 @@
             class="styled-input"
             required
           />
-          <button type="submit" class="styled-button">Done</button>
+          <button id="submitLink" class="styled-button">Done</button>
           <button type="button" id="cancelAddLink" class="styled-button">
             Cancel
           </button>
-        </form>
+        </div>
         <button id="closeLinksPopup" class="styled-button">Close</button>
       </div>
     </div>
@@ -125,7 +130,7 @@
     <div class="focus-popup" id="focus-popup">
       <div class="popup-content glass">
         <h2 id="focusPopupTitle">Set Focus Time</h2>
-        <form id="focusForm">
+        <div>
           <input
             type="number"
             id="focusHours"
@@ -142,15 +147,59 @@
             min="0"
             placeholder="Minutes"
           />
-          <button type="submit" class="styled-button">Start</button>
+          <button id="startFocus" class="styled-button">Start</button>
           <button type="button" id="closeFocusPopup" class="styled-button">
             Close
           </button>
-        </form>
-        <div id="focusCountdown" style="display: none"></div>
+        </div>
+        <div id="focusCountdownDisplay" style="display: none"></div>
       </div>
     </div>
 
+    <!-- Calendar Popup -->
+    <div class="calendar-popup" id="calendar-popup">
+      <div class="popup-content glass">
+        <h2>Google Calendar</h2>
+        <div id="calendarEvents"></div>
+        <div id="addEventForm" style="display: none">
+          <h3>Add New Event</h3>
+          <div>
+            <label for="eventSummary">Summary:</label>
+            <input
+              type="text"
+              id="eventSummary"
+              name="eventSummary"
+              class="styled-input"
+              required
+            />
+            <label for="eventStart">Start Time:</label>
+            <input
+              type="datetime-local"
+              id="eventStart"
+              name="eventStart"
+              class="styled-input"
+              required
+            />
+            <label for="eventEnd">End Time:</label>
+            <input
+              type="datetime-local"
+              id="eventEnd"
+              name="eventEnd"
+              class="styled-input"
+              required
+            />
+            <button id="submitEvent" class="styled-button">Add Event</button>
+            <button type="button" id="cancelAddEvent" class="styled-button">
+              Cancel
+            </button>
+          </div>
+        </div>
+        <button id="addEventButton" class="styled-button">Add Event</button>
+        <button id="closeCalendarPopup" class="styled-button">Close</button>
+      </div>
+    </div>
+
+    <script src="config.js"></script>
     <script src="script.js"></script>
   </body>
 </html>
